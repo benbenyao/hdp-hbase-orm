@@ -1,0 +1,17 @@
+### log INFO ERROR
+logging: 
+  config: classpath:log4j2.xml
+
+info:
+  app.name: hdp-hbase-orm
+  company.name: hdp.hbase.orm
+  build.artifactId: $project.artifactId$
+  build.version: $project.verson$
+  
+### hbase config
+hbase:
+  quorum: 192.168.2.239
+  port: 2181
+  rootDir: hdfs://192.168.2.237:8020/apps/hbase/data
+  nodeParent: /hbase-unsecure
+

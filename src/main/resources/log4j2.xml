@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 设置log4j2的自身log级别为 INFO -->
+<Configuration status="INFO" monitorInterval="30">
+	<Properties>
+	    <Property name="LOG_HOME">F:\logs\hdp-hbase-orm</Property><!--日志路径-->
+	    <Property name="PID">????</Property>
+	    <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+	    <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+	    <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %-40.40c{10} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+	</Properties>
+	
+	<Appenders>
+	    <Console name="Console" target="SYSTEM_OUT" follow="true">
+	        <PatternLayout pattern="${LOG_PATTERN}" />
+	    </Console>
+	    
+	    <RollingFile name="RollingFileInfo" fileName="${LOG_HOME}/info.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd-HH}-%i.log.gz">
+	        <Filters>
+                <ThresholdFilter level="INFO"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+	        <PatternLayout>
+	            <Pattern>${LOG_PATTERN}</Pattern>
+	        </PatternLayout>
+	        <Policies>
+	        	<TimeBasedTriggeringPolicy />
+	            <SizeBasedTriggeringPolicy size="200 MB" />
+	        </Policies>
+	        <DefaultRolloverStrategy max="20"/>
+	    </RollingFile>
+	    
+	    <RollingFile name="RollingFileWarn" fileName="${LOG_HOME}/warn.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd-HH}-%i.log.gz">
+	        <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+	        <PatternLayout>
+	            <Pattern>${LOG_PATTERN}</Pattern>
+	        </PatternLayout>
+	        <Policies>
+	        	<TimeBasedTriggeringPolicy />
+	            <SizeBasedTriggeringPolicy size="200 MB" />
+	        </Policies>
+	        <DefaultRolloverStrategy max="20"/>
+	    </RollingFile>
+	    
+	    <RollingFile name="RollingFileError" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd-HH}-%i.log.gz">
+	        <Filters>
+                <ThresholdFilter level="ERROR"/>
+            </Filters>
+	        <PatternLayout>
+	            <Pattern>${LOG_PATTERN}</Pattern>
+	        </PatternLayout>
+	        <Policies>
+	        	<TimeBasedTriggeringPolicy />
+	            <SizeBasedTriggeringPolicy size="200 MB" />
+	        </Policies>
+	        <DefaultRolloverStrategy max="20"/>
+	    </RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="info">
+	        <AppenderRef ref="RollingFileInfo" />
+	        <AppenderRef ref="RollingFileError" />
+	        <AppenderRef ref="Console" />
+	    </Root>
+	    
+		<Logger name="com.hdvon" level="info">
+	    	<AppenderRef ref="RollingFileInfo" />
+		</Logger>
+	</Loggers>
+	
+</Configuration>
